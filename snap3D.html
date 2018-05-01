@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Snap! Build Your Own Blocks 4.1.2.6</title>
+		<link rel="shortcut icon" href="favicon.ico">
+		<script type="text/javascript" src="morphic.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="widgets.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="blocks.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="threads.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="objects.js?version=2018-03-13"></script>
+		<script type="text/javascript" src="gui.js?version=2018-03-13"></script>
+		<script type="text/javascript" src="paint.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="lists.js?version=2018-03-14"></script>
+		<script type="text/javascript" src="byob.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="tables.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="symbols.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="xml.js?version=2018-00-09"></script>
+		<script type="text/javascript" src="store.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="locale.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="cloud.js?version=2018-03-14"></script>
+		<script type="text/javascript" src="sha512.js?version=2018-03-09"></script>
+		<script type="text/javascript" src="FileSaver.min.js?version=2018-03-09"></script>
+		 <!-- <script type="text/javascript" src="PR1214ChangesToMorphic.js"></script> -->
+		<script src="three.js" ></script>
+		<script src="OrbitControls.js"></script>
+		<script src="ColladaLoader.js"></script>
+
+
+		<script type="text/javascript">
+			var world;
+			window.onload = function () {
+				world = new WorldMorph(document.getElementById('world'));
+                world.worldCanvas.focus();
+				new IDE_Morph().openIn(world);
+        		loop();
+			};
+			function loop() {
+        		requestAnimationFrame(loop);
+				world.doOneCycle();
+			}
+		</script>
+
+	<body style="margin: 0;">
+		<canvas id="world" tabindex="1" style="position: absolute;"></canvas>		
+		<div id="ThreeJS" style="z-index: 1; position: absolute;border: solid 3px #868686; top:50px; right:5px"></div>
+		<canvas id="2Dcanvas" width="400px" height="300px" style="Z-index:2; position: absolute; top:50px; right:5px; pointer-events: none;"></canvas>         
+		<script>
+			var framecount=0;
+			// シーンを作成
+			var scene = new THREE.Scene();
+		 
+			// カメラを作成
+			var camera = new THREE.PerspectiveCamera( 75, 400/300, 0.1, 1000 );
+
+			// rendererを作成（アンチエイリアスも指定）
+			var renderer = new THREE.WebGLRenderer({antialias:true});
+		 
+			// レンダラーの色、サイズを指定
+			renderer.setClearColor("#000000");
+			renderer.setSize( 400, 300 );
+			renderer.shadowMapEnabled = true;
+			renderer.shadowMapSoft = true;
+
+			// DOMにrenderを追加する。
+			var container = document.getElementById( 'ThreeJS' );
+			container.style.width  = 400 + "px";
+			container.style.height = 300 + "px";
+			draggable(container);
+		    container.appendChild( renderer.domElement );
+
+			//2Dコンテキスト
+			var canvas = document.getElementById("2Dcanvas");
+			var ctx = canvas.getContext("2d");
+			ctx.setTransform(1, 0, 0, 1, canvas.width / 2, canvas.height / 2);
+			var mouseX,mouseY;
+
+			//そのほか追加
+		    var controls = new THREE.OrbitControls( camera,container);
+			var colladaLoader = new THREE.ColladaLoader();
+			var raycaster = new THREE.Raycaster();
+
+			// Render Loop
+			var render = function () {
+			requestAnimationFrame( render );		 
+			renderer.render(scene, camera);
+			framecount++;
+			};
+		 
+			render();
+
+
+
+function draggable(_container) {
+	var container = _container;
+	var isMouseDown;
+	var isMovable = false;
+
+	//container.style.position = "absolute";
+	container.onmousedown = function( event ) {
+		event.preventDefault();
+		var rect = container.getBoundingClientRect();
+    	offsetX = event.screenX - rect.left;
+    	offsetY = event.screenY - rect.top;
+    	isMouseDown = true;
+    }
+
+    document.onmouseup = function() {
+        isMouseDown = false;
+    }
+
+    document.onmousemove = function( event ) {
+        if (isMouseDown == true && isMovable == true ) {
+             container.style.left = event.screenX - offsetX + "px";
+             container.style.top = event.screenY - offsetY + "px";
+			 canvas.style.left = event.screenX - offsetX + "px";
+			 canvas.style.top = event.screenY - offsetY + "px";
+        }
+    }
+	
+	container.addEventListener( 'mousemove', onMouseMove, false );
+
+	function onMouseMove( event ) {
+		var rect = container.getBoundingClientRect();
+		mouseX = event.clientX - rect.left - canvas.width/2;
+		mouseY = event.clientY - rect.top - canvas.height/2;
+	}
+
+
+    container.addEventListener('dblclick', modeChange);
+
+	function modeChange(e) {
+    	if(isMovable == false){
+    		isMovable = true;
+    		controls.enablePan = false;
+    		controls.enableRotate = false;
+    		controls.enableZoom  = false;
+    		controls.enableKeys = false;
+    		container.style.border = "solid 3px red";
+    	} else {
+    		isMovable = false;
+    		controls.enablePan = true;
+    		controls.enableRotate = true;
+    		controls.enableZoom  = true;
+    		controls.enableKeys = false;
+    		container.style.border = "solid 3px gray";
+    	}
+
+	}
+}
+
+function onResize() {
+
+	// サイズを取得
+  const width = sub_win.innerWidth;
+  const height =sub_win.innerHeight;
+
+  // レンダラーのサイズを調整する
+  renderer.setPixelRatio(sub_win.devicePixelRatio);
+  renderer.setSize(width, height);
+
+  // カメラのアスペクト比を正す
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+
+}
+
+		  </script>
+	</body>
+</head>
+</html>
