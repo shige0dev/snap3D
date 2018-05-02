@@ -1733,4 +1733,3 @@ SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
     ctx.fillRect(u * 4, u * 7, k * 4, k);
     return canvas;
 };
-
