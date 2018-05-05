@@ -1,0 +1,6 @@
+Game: Splatoon
+Subject: Inkling (Female)
+Copyright: Nintendo
+Model Ripper: Random Talking Bush
+Hosting Permissions: The Models Resource
+Notes: Special thanks to ItsEasyActually for the model importing script.
