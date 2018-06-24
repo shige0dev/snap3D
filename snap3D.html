@@ -85,9 +85,11 @@
 
 			// Render Loop
 			var render = function () {
+			framecount++;
+			//controls.update();
+	        //effect.render(scene, camera);
 			requestAnimationFrame( render );		 
 			renderer.render(scene, camera);
-			framecount++;
 			};
 		 
 			render();
