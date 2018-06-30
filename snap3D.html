@@ -44,20 +44,20 @@
 		</script>
 
 	<body style="margin: 0;">
-		<canvas id="world" tabindex="1" style="position: absolute;"></canvas>		
-		<div id="ThreeJS" style="z-index: 1; position: absolute;border: solid 3px #868686; top:50px; right:5px"></div>
+		<canvas id="world" tabindex="1" 					style="position: absolute;"></canvas>		
+		<div id="ThreeJS" 									style="z-index: 1; position: absolute; border: solid 3px #868686; top:50px; right:5px; height:300px; width:400px"></div>
 		<canvas id="2Dcanvas" width="400px" height="300px" style="Z-index:2; position: absolute; top:50px; right:5px; pointer-events: none;"></canvas>         
 		<script>
-			var framecount=0;
+			framecount=0;
 			// シーンを作成
-			var scene = new THREE.Scene();
+			scene = new THREE.Scene();
 		 
 			// カメラを作成
-			var camera = new THREE.PerspectiveCamera( 75, 400/300, 0.1, 1000 );
+			camera = new THREE.PerspectiveCamera( 75, 400/300, 0.1, 1000 );
 			camera.name = "camera";
 			
 			// rendererを作成（アンチエイリアスも指定）
-			var renderer = new THREE.WebGLRenderer({antialias:true});
+			renderer = new THREE.WebGLRenderer({antialias:true});
 		 
 			// レンダラーの色、サイズを指定
 			renderer.setClearColor("#000000");
@@ -66,21 +66,20 @@
 			renderer.shadowMapSoft = true;
 
 			// DOMにrenderを追加する。
-			var container = document.getElementById( 'ThreeJS' );
-			container.style.width  = 400 + "px";
-			container.style.height = 300 + "px";
+			container = document.getElementById( 'ThreeJS' );
 			draggable(container);
 		    container.appendChild( renderer.domElement );
 
 			//2Dコンテキスト
-			var canvas = document.getElementById("2Dcanvas");
-			var ctx = canvas.getContext("2d");
+			canvas = document.getElementById("2Dcanvas");
+			ctx = canvas.getContext("2d");
 			ctx.setTransform(1, 0, 0, 1, canvas.width / 2, canvas.height / 2);
+
 			var mouseX,mouseY;
 
 			//そのほか追加
-		    var controls = new THREE.OrbitControls( camera,container);
-			var colladaLoader = new THREE.ColladaLoader();
+		    controls = new THREE.OrbitControls( camera,container);
+			colladaLoader = new THREE.ColladaLoader();
 			//var raycaster = new THREE.Raycaster();
 
 			// Render Loop
