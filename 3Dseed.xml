@@ -1,0 +1,2945 @@
+<blocks app="Snap! 4.0, http://snap.berkeley.edu" version="1">
+        <block-definition s="ウインドウサイズ %&apos;W&apos; %&apos;H&apos;" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">400</input>
+                <input type="%s">300</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>w</l>
+                            <l>h</l>
+                        </list>
+                        <l>container.style.width = w +"px";&#xD;container.style.height =h +"px";&#xD;renderer.setSize(w,h);&#xD;camera.aspect = w/h;&#xD;camera.updateProjectionMatrix();&#xD;canvas.style.width = w +"px";
+&#xD;&#xD;canvas.style.height = h +"px";&#xD;//ctx.translate(canvas.width / 2, canvas.height / 2);&#xD;ctx.setTransform(1, 0, 0, 1, canvas.width / 2, canvas.height / 2);</l>
+                    </block>
+                    <list>
+                        <block var="W"/>
+                        <block var="H"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="初期化―――――――― %&apos;codes&apos;" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%cs"></input>
+            </inputs>
+            <script>
+                <block s="doSetFastTracking">
+                    <l>
+                        <bool>true</bool>
+                    </l>
+                </block>
+                <custom-block s="すべてをステージから削除する"></custom-block>
+                <custom-block s="clear canvas"></custom-block>
+                <block s="doRun">
+                    <block var="codes"/>
+                    <list></list>
+                </block>
+                <block s="doSetFastTracking">
+                    <l>
+                        <bool>false</bool>
+                    </l>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="// %&apos;comment&apos;" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">ーーーーーーーー</input>
+            </inputs>
+        </block-definition>
+        <block-definition s="カメラの位置を %&apos;vec&apos; にする" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <custom-block s="%s の位置を %s にする">
+                    <custom-block s="カメラ"></custom-block>
+                    <block var="vec"/>
+                </custom-block>
+            </script>
+        </block-definition>
+        <block-definition s="カメラの向きを %&apos;vec&apos; （地点） に向ける" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>vec</l>
+                        </list>
+                        <l>camera.lookAt(vec); </l>
+                    </block>
+                    <list>
+                        <block var="vec"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="照明（点光源） 強さ: %&apos;val&apos; % 距離: %&apos;val2&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">100</input>
+                <input type="%n">100</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>val</l>
+                                <l>val2</l>
+                            </list>
+                            <l>var light = new THREE.PointLight(0xffffff,val*0.01,val2,2);&#xD;light.position.set(0, 0, 0).normalize();&#xD;light.castShadow = true;&#xD;light.shadow.mapSize.width = 2048;&#xD;light.shadow.mapSize.height = 2048;&#xD;light.name = "light";&#xD;scene.add(light);&#xD;return light;</l>
+                        </block>
+                        <list>
+                            <block var="val"/>
+                            <block var="val2"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="照明（平行） 強さ: %&apos;val&apos; %" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">100</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>val</l>
+                            </list>
+                            <l>var light = new THREE.DirectionalLight(0xffffff,val*0.01);&#xD;light.position.set(0, 0, 0).normalize();&#xD;light.castShadow = true;&#xD;light.shadow.mapSize.width = 4096;&#xD;light.shadow.mapSize.height = 4096;&#xD;light.shadow.camera.near = 1;&#xD;light.shadow.camera.far = 200;&#xD;light.shadow.camera.top = 100;&#xD;light.shadow.camera.bottom = -100;&#xD;light.shadow.camera.right = 100;&#xD;light.shadow.camera.left = -100;&#xD;light.name = "light";&#xD;scene.add(light);&#xD;return light;</l>
+                        </block>
+                        <list>
+                            <block var="val"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="照明（環境） 強さ： %&apos;強さ&apos; %" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">100</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>fac</l>
+                            </list>
+                            <l>var light = new THREE.AmbientLight(0xffffff);&#xD;light.color.multiplyScalar(fac/100); &#xD;light.name = "light";   &#xD;scene.add(light);&#xD;return light;</l>
+                        </block>
+                        <list>
+                            <block var="強さ"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="照明（スポット）" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l></l>
+                            </list>
+                            <l>var light = new THREE.SpotLight(0xffffff);&#xD;light.target.position.set(0,-1,0);&#xD;light.position.set(0, 0, 0);&#xD;light.castShadow = true;&#xD;light.shadow.mapSize.width = 512;&#xD;light.shadow.mapSize.height = 512;&#xD;light.name = "light";&#xD;scene.add(light);&#xD;return light;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="形状（立方体） サイズ: %&apos;x&apos; %&apos;y&apos; %&apos;z&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+                <input type="%n">1</input>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>_x</l>
+                                <l>_y</l>
+                                <l>_z</l>
+                            </list>
+                            <l>var geometry = new THREE.BoxGeometry( _x, _y, _z );&#xD;var material = new THREE.MeshLambertMaterial({ color: "#FFFFFF" });&#xD;var cube = new THREE.Mesh( geometry, material );&#xD;&#xD;cube.castShadow = true; &#xD;cube.receiveShadow = true;&#xD;&#xD;scene.add(cube);&#xD;return cube;</l>
+                        </block>
+                        <list>
+                            <block var="x"/>
+                            <block var="y"/>
+                            <block var="z"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="形状（板） サイズ: %&apos;x&apos; %&apos;y&apos; %&apos;z&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+                <input type="%n">1</input>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>_x</l>
+                                <l>_y</l>
+                                <l>_z</l>
+                            </list>
+                            <l>var geometry = new THREE.PlaneGeometry( _x, _y, _z );&#xD;var material = new THREE.MeshLambertMaterial({ color: "#FFFFFF" });&#xD;var cube = new THREE.Mesh( geometry, material );&#xD;&#xD;cube.castShadow = true; &#xD;cube.receiveShadow = true;&#xD;&#xD;scene.add(cube);&#xD;return cube;</l>
+                        </block>
+                        <list>
+                            <block var="x"/>
+                            <block var="y"/>
+                            <block var="z"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="形状（球体） 半径： %&apos;r&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>r</l>
+                            </list>
+                            <l>var geometry = new THREE.SphereGeometry( r,32,32 );&#xD;var material = new THREE.MeshStandardMaterial({color :0xffffff});&#xD;//var material = new THREE.MeshBasicMaterial({color :0xffffff});
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;var obj = new THREE.Mesh( geometry, material );&#xD;&#xD;obj.castShadow = true; &#xD;//obj.receiveShadow = true;&#xD;&#xD;scene.add( obj );&#xD;return obj;</l>
+                        </block>
+                        <list>
+                            <block var="r"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="形状（トーラス） 半径： %&apos;r&apos; 太さ： %&apos;t&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+                <input type="%n">0.4</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>r</l>
+                                <l>t</l>
+                            </list>
+                            <l>    var geometry = new THREE.TorusGeometry( r, t, 16 ,32);&#xD;    var material = new THREE.MeshLambertMaterial({ color: "#ffffff" });&#xD;    var obj = new THREE.Mesh( geometry, material );&#xD;&#xD;    obj.castShadow = true; &#xD;    obj.receiveShadow = true;&#xD;    scene.add( obj );&#xD;&#xD;    return obj;</l>
+                        </block>
+                        <list>
+                            <block var="r"/>
+                            <block var="t"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="形状（collada）　url: %&apos;url&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>url</l>
+                        </list>
+                        <l>isDone = false;&#xD;colladaLoader.load(url,function(result){&#xD;dae = result.scene;&#xD;dae.name = "collada";&#xD;console.log(dae);&#xD;mesh = dae.children[1];&#xD;//mesh.castShadow = true; 
+&#xD;&#xD;//mesh.receiveShadow = true;
+&#xD;&#xD;//console.log(mesh);&#xD;//scene.add(mesh);&#xD;scene.add(dae);&#xD;//console.log("end");&#xD;isDone = true;&#xD;});</l>
+                    </block>
+                    <list>
+                        <block var="url"/>
+                    </list>
+                </block>
+                <block s="doWaitUntil">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>return isDone;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list></list>
+                        <l>console.log("Done");</l>
+                    </block>
+                    <list></list>
+                </block>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>return dae;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+            <scripts>
+                <script x="108" y="458.2">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>//return scene.getObjectByName("collada");&#xD;return scene.children[scene.children.length-1];</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </script>
+            </scripts>
+        </block-definition>
+        <block-definition s="線（多角形） %&apos;vartex&apos;" type="reporter" category="variables">
+            <variables>
+                <list id="311">
+                    <item>
+                        <l>geometry</l>
+                    </item>
+                    <item>
+                        <l>i</l>
+                    </item>
+                </list>
+            </variables>
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%mult%txt"></input>
+            </inputs>
+            <script>
+                <block s="doSetVar">
+                    <l>geometry</l>
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>return new THREE.Geometry();</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+                <block s="doSetVar">
+                    <l>i</l>
+                    <l>0</l>
+                </block>
+                <block s="doRepeat">
+                    <block s="reportListLength">
+                        <block var="vartex"/>
+                    </block>
+                    <script>
+                        <block s="doChangeVar">
+                            <l>i</l>
+                            <l>1</l>
+                        </block>
+                        <block s="doRun">
+                            <block s="reportJSFunction">
+                                <list>
+                                    <l>geometry</l>
+                                    <l>vtx</l>
+                                </list>
+                                <l>geometry.vertices.push(vtx);</l>
+                            </block>
+                            <list>
+                                <block var="geometry"/>
+                                <block s="reportListItem">
+                                    <block var="i"/>
+                                    <block var="vartex"/>
+                                </block>
+                            </list>
+                        </block>
+                    </script>
+                </block>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>geometry</l>
+                            </list>
+                            <l>var material = new THREE.LineBasicMaterial({color: 0xffffff});&#xD;var line = new THREE.Line( geometry, material );&#xD;//line.verticesNeedUpdate = true;&#xD;//line.elementNeedUpdate = true;  &#xD;scene.add( line );&#xD;return line;</l>
+                        </block>
+                        <list>
+                            <block var="geometry"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="線（円） 半径： %&apos;r&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>r</l>
+                            </list>
+                            <l>var geometry = new THREE.Geometry();&#xD;for(i=0;i&lt;65;i++){&#xD;geometry.vertices.push(new THREE.Vector3(r*Math.sin(i*3.14/32),0,r*Math.cos(i*3.14/32)));&#xD;}&#xD;&#xD;var material = new THREE.LineBasicMaterial({color: 0xffffff});&#xD;var line = new THREE.Line( geometry, material );&#xD;//line.verticesNeedUpdate = true;&#xD;//line.elementNeedUpdate = true;  &#xD;scene.add( line );&#xD;return line;</l>
+                        </block>
+                        <list>
+                            <block var="r"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="線（正方形） 一辺： %&apos;d&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>d</l>
+                            </list>
+                            <l>var geometry = new THREE.Geometry();&#xD;geometry.vertices.push(&#xD;　　new THREE.Vector3(-d/2,0,-d/2),&#xD;    new THREE.Vector3(d/2,0,-d/2),&#xD;    new THREE.Vector3(d/2,0,d/2),&#xD;    new THREE.Vector3(-d/2,0,d/2),&#xD;    new THREE.Vector3(-d/2,0,-d/2)&#xD;);&#xD;&#xD;var material = new THREE.LineBasicMaterial({color: 0xffffff});&#xD;var line = new THREE.Line( geometry, material );&#xD;//line.verticesNeedUpdate = true;&#xD;//line.elementNeedUpdate = true;  &#xD;scene.add( line );&#xD;return line;</l>
+                        </block>
+                        <list>
+                            <block var="d"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="vec： %&apos;x&apos; %&apos;y&apos; %&apos;z&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>x</l>
+                                <l>y</l>
+                                <l>z</l>
+                            </list>
+                            <l>return	 new THREE.Vector3( x, y, z );</l>
+                        </block>
+                        <list>
+                            <block var="x"/>
+                            <block var="y"/>
+                            <block var="z"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="ガイドグリッドを作る 大きさ: %&apos;_s&apos; ピッチ: %&apos;_p&apos;" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">10</input>
+                <input type="%n">10</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>_s</l>
+                            <l>_p</l>
+                        </list>
+                        <l>//GridHelper(大きさ, １マスの大きさ)
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;var grid = new THREE.GridHelper(_s, _p);
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;//シーンオブジェクトに追加
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;scene.add(grid);     </l>
+                    </block>
+                    <list>
+                        <block var="_s"/>
+                        <block var="_p"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のクローン" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>var obj2 = obj.clone();&#xD;scene.add(obj2);&#xD;return obj2;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="カメラ" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>return camera;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="カメラヘルパーを作る %&apos;light&apos;" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">camera</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>light</l>
+                        </list>
+                        <l>var cameraHelper = new THREE.CameraHelper(light.shadow.camera);&#xD;scene.add(cameraHelper);</l>
+                    </block>
+                    <list>
+                        <block var="light"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="ステージの %&apos;n&apos; 番目の要素を取得" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>n</l>
+                            </list>
+                            <l>console.log(scene.children[n]);&#xD;return scene.children[n];</l>
+                        </block>
+                        <list>
+                            <block var="n"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を グループ: %&apos;group&apos; に追加する" type="command" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">obj</input>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>group</l>
+                        </list>
+                        <l>group.add(obj);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="group"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を グループ: %&apos;group&apos; から削除する" type="command" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">obj</input>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>group</l>
+                        </list>
+                        <l>group.remove(obj);&#xD;scene.add(obj);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="group"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; をステージに登録する" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>scene.add(obj);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec&apos; のX" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec</l>
+                            </list>
+                            <l>return vec.x;</l>
+                        </block>
+                        <list>
+                            <block var="vec"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="カウンタ" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l></l>
+                            </list>
+                            <l>return framecount;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; をステージから削除する" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>scene.remove(obj);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="すべてをステージから削除する" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list></list>
+                        <l>var obj;&#xD;while(scene.children.length){&#xD;obj = scene.children[0];&#xD;if(obj.name == "light"){
+&#xD;  scene.remove(obj);
+&#xD;  obj = null;
+&#xD; } else {&#xD;  scene.remove(obj);
+&#xD;  obj.geometry.dispose();
+&#xD;  if(obj.material.map != null){obj.material.map.dispose();}&#xD;  obj.material.dispose();
+&#xD;  obj = null;
+&#xD; }
+&#xD;}&#xD;&#xD;console.log(scene.children.length);&#xD;controls.reset();
+                        </l>
+                    </block>
+                    <list></list>
+                </block>
+            </script>
+            <scripts>
+                <script x="24" y="579.8333343333334">
+                    <block s="reportJSFunction">
+                        <list></list>
+                        <l>//var obj;&#xD;//while(scene.children.length){&#xD;//obj = scene.children[0]&#xD;//scene.remove(obj);
+&#xD;//scene.remove(scene.children[0]);&#xD;//scene.children[0].material.dispose();	
+&#xD;//console.log(scene.children[0].geometry);
+&#xD;//scene.children[0].material.dispose();
+&#xD;//scene.children[0] = null;&#xD;//}&#xD;//scene.add(camera);&#xD;//console.log(camera);</l>
+                    </block>
+                </script>
+            </scripts>
+        </block-definition>
+        <block-definition s="サイン波 速さ %&apos;f&apos; 値 %&apos;A&apos; ～ %&apos;B&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">1</input>
+                <input type="%s">-1</input>
+                <input type="%s">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportSum">
+                        <block s="reportProduct">
+                            <block s="reportQuotient">
+                                <block s="reportDifference">
+                                    <block var="B"/>
+                                    <block var="A"/>
+                                </block>
+                                <l>2</l>
+                            </block>
+                            <block s="reportMonadic">
+                                <l>
+                                    <option>sin</option>
+                                </l>
+                                <block s="reportProduct">
+                                    <block var="f"/>
+                                    <custom-block s="カウンタ"></custom-block>
+                                </block>
+                            </block>
+                        </block>
+                        <block s="reportQuotient">
+                            <block s="reportSum">
+                                <block var="A"/>
+                                <block var="B"/>
+                            </block>
+                            <l>2</l>
+                        </block>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="コサイン波　速さ %&apos;f&apos; 値 %&apos;A&apos; ～ %&apos;B&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">1</input>
+                <input type="%s">0</input>
+                <input type="%s">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportSum">
+                        <block s="reportProduct">
+                            <block s="reportQuotient">
+                                <block s="reportDifference">
+                                    <block var="B"/>
+                                    <block var="A"/>
+                                </block>
+                                <l>2</l>
+                            </block>
+                            <block s="reportMonadic">
+                                <l>
+                                    <option>cos</option>
+                                </l>
+                                <block s="reportProduct">
+                                    <block var="f"/>
+                                    <custom-block s="カウンタ"></custom-block>
+                                </block>
+                            </block>
+                        </block>
+                        <block s="reportQuotient">
+                            <block s="reportSum">
+                                <block var="A"/>
+                                <block var="B"/>
+                            </block>
+                            <l>2</l>
+                        </block>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の色を RGB %&apos;r&apos; %&apos;g&apos; %&apos;b&apos; にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%n">255</input>
+                <input type="%n">255</input>
+                <input type="%n">255</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                                <l>r</l>
+                                <l>g</l>
+                                <l>b</l>
+                            </list>
+                            <l>var col = new THREE.Color(r/255,g/255,b/255);&#xD;if(obj.isLight){&#xD;obj.color = col;&#xD;}else{&#xD;obj.material.color = col; &#xD;};&#xD;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                            <block var="r"/>
+                            <block var="g"/>
+                            <block var="b"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の透明度を %&apos;val&apos; ％にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%n">100</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>obj.material.opacity = val*0.01;&#xD;obj.material.transparent = true;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のざらつきを %&apos;val&apos; ％にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%n">100</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>obj.material.roughness = val*0.01;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; をワイヤーフレームにする／しない" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>img</l>
+                        </list>
+                        <l>obj.material.wireframe = !obj.material.wireframe;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のテクスチャーを image: %&apos;img&apos; にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%txt">assets/textures/earth.jpg</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>img</l>
+                        </list>
+                        <l>var loader = new THREE.TextureLoader();&#xD;loader.load(img,function(texture){&#xD;                obj.material.map = texture;&#xD;                obj.material.needsUpdate = true;&#xD;                }&#xD; );
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="img"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のバンプマップを %&apos;img&apos; %&apos;scale&apos; にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">assets/textures/earth_b.jpg</input>
+                <input type="%n">0.1</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>img</l>
+                            <l>scale</l>
+                        </list>
+                        <l>var loader = new THREE.TextureLoader(); &#xD;loader.load(img,function(texture){&#xD; obj.material.bumpMap = texture;&#xD; obj.material.bumpScale = scale*0.01;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD; obj.material.needsUpdate = true;&#xD; //console.log(obj.material);&#xD; }&#xD;)</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="img"/>
+                        <block var="scale"/>
+                    </list>
+                </block>
+            </script>
+            <scripts>
+                <script x="432" y="133.2">
+                    <block s="doRun">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                                <l>img</l>
+                                <l>scale</l>
+                            </list>
+                            <l>var texture = new THREE.TextureLoader().load(img); &#xD;obj.material.bumpMap = texture;&#xD;obj.material.bumpScale = scale*0.01;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;obj.material.needsUpdate = true;&#xD;//console.log(obj.material);</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                            <block var="img"/>
+                            <block var="scale"/>
+                        </list>
+                    </block>
+                    <block s="doRun">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                                <l>img</l>
+                                <l>scale</l>
+                            </list>
+                            <l>var texture = new THREE.TextureLoader().load(img); &#xD;var mat = new THREE.MeshStandardMaterial( {&#xD;     bumpMap: texture,&#xD;     bumpScale:scale*0.01,&#xD;     roughness:1,&#xD; } );&#xD;obj.material = mat;&#xD;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                            <block var="img"/>
+                            <block var="scale"/>
+                        </list>
+                    </block>
+                </script>
+            </scripts>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; をコンソール出力する" type="command" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>console.log(obj);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="点光源ヘルパーを作る %&apos;light&apos;" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">light</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>light</l>
+                        </list>
+                        <l>var lightHelper = new THREE.PointLightHelper( light, 1);//(光源,ヘルパーオブジェクトの大きさ)&#xD;scene.add(lightHelper);</l>
+                    </block>
+                    <list>
+                        <block var="light"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="平行光源ヘルパーを作る %&apos;light&apos;" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">light</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>light</l>
+                        </list>
+                        <l>var LightHelper = new THREE.DirectionalLightHelper( light, 1);&#xD;scene.add( LightHelper);&#xD;</l>
+                    </block>
+                    <list>
+                        <block var="light"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="新規グループを作成" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>var group = new THREE.Group();&#xD;scene.add(group);&#xD;return group;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;raycaster&apos; で場所 %&apos;vec&apos; から 方向: %&apos;dir&apos; 距離: %&apos;far&apos; を調べた結果" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">raycaster</input>
+                <input type="%s">vec</input>
+                <input type="%txt">vec</input>
+                <input type="%n">10</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>raycaster</l>
+                                <l>vec</l>
+                                <l>dir</l>
+                                <l>far</l>
+                            </list>
+                            <l>raycaster.set(vec,dir.normalize());&#xD;raycaster.far = far;&#xD;const intersects = raycaster.intersectObjects(scene.children);&#xD;&#xD;if(intersects.length &gt; 0){&#xD;  //console.log(intersects[0]);&#xD;  return intersects[0];&#xD;}else{&#xD;  return false;&#xD;}</l>
+                        </block>
+                        <list>
+                            <block var="raycaster"/>
+                            <block var="vec"/>
+                            <block var="dir"/>
+                            <block var="far"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="raycaster: 2D画面内の %&apos;x&apos; %&apos;y&apos; を調べる" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+                <input type="%n"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>x</l>
+                                <l>y</l>
+                            </list>
+                            <l>raycaster.setFromCamera(new THREE.Vector2(x,y), camera );&#xD;&#xD;const intersects = raycaster.intersectObjects(scene.children);&#xD;&#xD;if(intersects.length &gt; 0){&#xD;  // ぶつかったオブジェクトに対してなんかする&#xD;//console.log(intersects);&#xD;return intersects[0].object;&#xD;}else{&#xD;return false;&#xD;}&#xD;</l>
+                        </block>
+                        <list>
+                            <block var="x"/>
+                            <block var="y"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の位置を %&apos;vec&apos; にする" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>vec</l>
+                        </list>
+                        <l>obj.position.setX(vec.x);&#xD;obj.position.setY(vec.y);&#xD;obj.position.setZ(vec.z);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="vec"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の位置" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>var vec = new THREE.Vector3(); &#xD;obj.getWorldPosition(vec);&#xD;return vec;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の前方" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>var vec = new THREE.Vector3(); &#xD;obj.getWorldDirection(vec);&#xD;return vec;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の位置を %&apos;vec&apos; ずつ変える" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>vec</l>
+                        </list>
+                        <l>obj.position.x = obj.position.x + vec.x;&#xD;obj.position.y = obj.position.y + vec.y;
+&#xD;obj.position.z = obj.position.z + vec.z;
+&#xD;&#xD;//obj.translateOnAxis(new THREE.Vector3(1,0,0), vec.x);
+&#xD;//obj.translateOnAxis(new THREE.Vector3(0,1,0), vec.y);
+&#xD;//obj.translateOnAxis(new THREE.Vector3(0,0,1), vec.z);
+&#xD;&#xD;//obj.translateX(vec.x);&#xD;//obj.translateY(vec.y);&#xD;//obj.translateZ(vec.z);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="vec"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の右方" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>var vec1 = new THREE.Vector3(); &#xD;var vec2 = new THREE.Vector3(0,1,0);&#xD;&#xD;obj.getWorldDirection(vec1);&#xD;var vec3 = vec1.crossVectors(vec1,vec2);&#xD;vec3.normalize();&#xD;return vec3;&#xD;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の左方" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>var vec1 = new THREE.Vector3(); &#xD;var vec2 = new THREE.Vector3(0,1,0);&#xD;&#xD;obj.getWorldDirection(vec1);&#xD;var vec3 = vec1.crossVectors(vec2,vec1);&#xD;return vec3;&#xD;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の上方" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>var vec = new THREE.Vector3(); &#xD;return obj.up;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec&apos; の %&apos;n&apos; 倍" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec</l>
+                                <l>n</l>
+                            </list>
+                            <l>return vec.multiplyScalar(n);</l>
+                        </block>
+                        <list>
+                            <block var="vec"/>
+                            <block var="n"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の向きを %&apos;vec&apos; 方向にする" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>vec</l>
+                        </list>
+                        <l>var up = new THREE.Vector3(0, 0, 1);
+&#xD;&#xD;var normalAxis = new THREE.Vector3(vec.x, vec.y, vec.z).normalize();
+&#xD;&#xD;&#xD;var dir = new THREE.Vector3();
+&#xD;&#xD;dir.crossVectors(up, normalAxis).normalize();
+&#xD;
+&#xD;&#xD;&#xD;var dot = up.dot(normalAxis);&#xD;var rad = Math.acos(dot);
+&#xD;&#xD;&#xD;var q = new THREE.Quaternion();
+&#xD;&#xD;q.setFromAxisAngle(dir, rad);
+&#xD;&#xD;obj.rotation.setFromQuaternion(q);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="vec"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の向きを %&apos;vec&apos; （地点） に向ける" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>vec</l>
+                        </list>
+                        <l>obj.lookAt(vec ); </l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="vec"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="clear canvas" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list></list>
+                        <l>ctx.clearRect(-canvas.width/2, -canvas.height/2 , canvas.width, canvas.height);</l>
+                    </block>
+                    <list></list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="mouseX" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>return mouseX;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="mouseY" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l></l>
+                            </list>
+                            <l>return mouseY;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="drawmode %&apos;mode&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">
+&#xD;&#xD;&#xD;                
+&#xD;&#xD;&#xD;            
+&#xD;&#xD;                
+&#xD;&#xD;            
+&#xD;                    
+&#xD;                    <options>source-over
+source-in
+source-out
+source-atop
+destination-over
+destination-in
+destination-out
+destination-atop
+lighter
+darken
+copy
+xor</options>
+                </input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>mode</l>
+                        </list>
+                        <l>ctx.globalCompositeOperation = mode;&#xD;//console.log(ctx.globalCompositeOperation);</l>
+                    </block>
+                    <list>
+                        <block var="mode"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="fillstyle %&apos;r&apos; %&apos;g&apos; %&apos;b&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">255</input>
+                <input type="%n">255</input>
+                <input type="%n">255</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>r</l>
+                            <l>g</l>
+                            <l>b</l>
+                        </list>
+                        <l>ctx.fillStyle = "rgb("+ r +","+ g +","+ b +")";
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;</l>
+                    </block>
+                    <list>
+                        <block var="r"/>
+                        <block var="g"/>
+                        <block var="b"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="strokestyle %&apos;r&apos; %&apos;g&apos; %&apos;b&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">255</input>
+                <input type="%n">255</input>
+                <input type="%n">255</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>r</l>
+                            <l>g</l>
+                            <l>b</l>
+                        </list>
+                        <l>ctx.strokeStyle = "rgb("+ r +","+ g +","+ b +")";
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;</l>
+                    </block>
+                    <list>
+                        <block var="r"/>
+                        <block var="g"/>
+                        <block var="b"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="stroke weight %&apos;val&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>val</l>
+                        </list>
+                        <l>ctx.lineWidth = val;</l>
+                    </block>
+                    <list>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="alpha %&apos;val&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">1</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>val</l>
+                        </list>
+                        <l>ctx.globalAlpha = val;</l>
+                    </block>
+                    <list>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="fill rect %&apos;x&apos; %&apos;y&apos; %&apos;w&apos; %&apos;h&apos; corner/center %&apos;mode&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%b">false</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x</l>
+                            <l>y</l>
+                            <l>w</l>
+                            <l>h</l>
+                            <l>mode</l>
+                        </list>
+                        <l>if(!mode){&#xD;ctx.fillRect(x, y, w, h);&#xD;}else{&#xD;ctx.fillRect(x-w/2, y-h/2, w, h);&#xD;};</l>
+                    </block>
+                    <list>
+                        <block var="x"/>
+                        <block var="y"/>
+                        <block var="w"/>
+                        <block var="h"/>
+                        <block var="mode"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="stroke rect %&apos;x&apos; %&apos;y&apos; %&apos;w&apos; %&apos;h&apos; corner/center %&apos;mode&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%b">false</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x</l>
+                            <l>y</l>
+                            <l>w</l>
+                            <l>h</l>
+                            <l>mode</l>
+                        </list>
+                        <l>if(!mode){&#xD;ctx.strokeRect(x, y, w, h);&#xD;}else{&#xD;ctx.strokeRect(x-w/2, y-h/2, w, h);
+&#xD;&#xD;&#xD;&#xD;}</l>
+                    </block>
+                    <list>
+                        <block var="x"/>
+                        <block var="y"/>
+                        <block var="w"/>
+                        <block var="h"/>
+                        <block var="mode"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="fill circle %&apos;x&apos; %&apos;y&apos; r: %&apos;r&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x</l>
+                            <l>y</l>
+                            <l>r</l>
+                        </list>
+                        <l>ctx.beginPath();ctx.arc(x, y, r,0, Math.PI*2);ctx.fill();</l>
+                    </block>
+                    <list>
+                        <block var="x"/>
+                        <block var="y"/>
+                        <block var="r"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="stroke circle %&apos;x&apos; %&apos;y&apos; r: %&apos;r&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x</l>
+                            <l>y</l>
+                            <l>r</l>
+                        </list>
+                        <l>ctx.beginPath();ctx.arc(x, y, r,0, Math.PI*2);ctx.stroke();</l>
+                    </block>
+                    <list>
+                        <block var="x"/>
+                        <block var="y"/>
+                        <block var="r"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="stroke line %&apos;x0&apos; %&apos;y0&apos; %&apos;x1&apos; %&apos;y1&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x0</l>
+                            <l>y0</l>
+                            <l>x1</l>
+                            <l>y1</l>
+                        </list>
+                        <l>ctx.beginPath();ctx.moveTo(x0, y0);
+&#xD;&#xD;&#xD;ctx.lineTo(x1, y1);&#xD;//ctx.closePath();&#xD;ctx.stroke();</l>
+                    </block>
+                    <list>
+                        <block var="x0"/>
+                        <block var="y0"/>
+                        <block var="x1"/>
+                        <block var="y1"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="setFont %&apos;font&apos; %&apos;align&apos; size: %&apos;size&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">Arial
+&#xD;&#xD;&#xD;                
+&#xD;&#xD;&#xD;            
+&#xD;&#xD;                
+&#xD;&#xD;            
+&#xD;                    
+&#xD;                    <options>Arial
+serif</options>
+                </input>
+                <input type="%txt">left
+&#xD;&#xD;&#xD;                
+&#xD;&#xD;&#xD;            
+&#xD;&#xD;                
+&#xD;&#xD;            
+&#xD;                    
+&#xD;                    <options>center
+left
+right</options>
+                </input>
+                <input type="%n">20</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>font</l>
+                            <l>align</l>
+                            <l>size</l>
+                        </list>
+                        <l>ctx.font = size + "px " + font;&#xD;ctx.textAlign = align;</l>
+                    </block>
+                    <list>
+                        <block var="font"/>
+                        <block var="align"/>
+                        <block var="size"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="fill text %&apos;x&apos; %&apos;y&apos; text: %&apos;txt&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x</l>
+                            <l>y</l>
+                            <l>txt</l>
+                        </list>
+                        <l>ctx.fillText(txt, x, y);</l>
+                    </block>
+                    <list>
+                        <block var="x"/>
+                        <block var="y"/>
+                        <block var="txt"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="スプライト を整列させる" type="command" category="control">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doDeclareVariables">
+                    <list>
+                        <l>a</l>
+                    </list>
+                </block>
+                <block s="doSetVar">
+                    <l>a</l>
+                    <l>0</l>
+                </block>
+                <block s="doRepeat">
+                    <block s="reportListLength">
+                        <block s="reportGet">
+                            <l>
+                                <option>other sprites</option>
+                            </l>
+                        </block>
+                    </block>
+                    <script>
+                        <block s="doChangeVar">
+                            <l>a</l>
+                            <l>1</l>
+                        </block>
+                        <block s="doTellTo">
+                            <block s="reportListItem">
+                                <block var="a"/>
+                                <block s="reportGet">
+                                    <l>
+                                        <option>neighbors</option>
+                                    </l>
+                                </block>
+                            </block>
+                            <block s="reifyScript">
+                                <script>
+                                    <block s="gotoXY">
+                                        <l>0</l>
+                                        <l>0</l>
+                                    </block>
+                                    <block s="setHeading">
+                                        <l>0</l>
+                                    </block>
+                                    <block s="setColor">
+                                        <color>250,19,0,1</color>
+                                    </block>
+                                    <block s="hide"></block>
+                                </script>
+                                <list></list>
+                            </block>
+                            <list></list>
+                        </block>
+                    </script>
+                </block>
+                <block s="gotoXY">
+                    <l>0</l>
+                    <l>0</l>
+                </block>
+                <block s="setHeading">
+                    <l>0</l>
+                </block>
+                <block s="setColor">
+                    <color>250,28,0,1</color>
+                </block>
+                <block s="hide"></block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のテクスチャ画像（陰なし）を %&apos;img&apos; にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%txt">assets/textures/earth_b.jpg</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>img</l>
+                        </list>
+                        <l>var loader = new THREE.TextureLoader();&#xD;loader.load(img,function(texture){&#xD; var mat = new THREE.MeshBasicMaterial({
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;  color: 0xFFFFFF,
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;  map: texture,
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD; });
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD; //console.log(mat);
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD; obj.material = mat;&#xD;}&#xD;);&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="img"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; が影を落とす/落とさない" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>obj.castShadow = !obj.castShadow;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; が影を受ける/受けない" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>obj.receiveShadow = !obj.receiveShadow;&#xD;obj.material.needsUpdate = true;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+            <scripts>
+                <script x="66" y="127.19999999999999">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>r</l>
+                        </list>
+                        <l>var geometry = new THREE.SphereGeometry( r,32,32 );&#xD;var material = new THREE.MeshStandardMaterial({color :0xffffff});&#xD;//var material = new THREE.MeshBasicMaterial({color :0xffffff});
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;var obj = new THREE.Mesh( geometry, material );&#xD;&#xD;obj.castShadow = true; &#xD;obj.receiveShadow = true;&#xD;&#xD;scene.add( obj );&#xD;return obj;</l>
+                    </block>
+                </script>
+            </scripts>
+        </block-definition>
+        <block-definition s="%&apos;val&apos; の小数点 %&apos;fig&apos; ケタにする" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>val</l>
+                                <l>fig</l>
+                            </list>
+                            <l>return val.toFixed(fig);</l>
+                        </block>
+                        <list>
+                            <block var="val"/>
+                            <block var="fig"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="for %&apos;i&apos; = %&apos;start&apos; to %&apos;end&apos; %&apos;action&apos;" type="command" category="control">
+            <header></header>
+            <code></code>
+            <translations>de:für _ = _ bis _ _&#xD;</translations>
+            <inputs>
+                <input type="%upvar"></input>
+                <input type="%n">1</input>
+                <input type="%n">10</input>
+                <input type="%cs"></input>
+            </inputs>
+            <script>
+                <block s="doDeclareVariables">
+                    <list>
+                        <l>step</l>
+                        <l>tester</l>
+                    </list>
+                </block>
+                <block s="doIfElse">
+                    <block s="reportGreaterThan">
+                        <block var="start"/>
+                        <block var="end"/>
+                    </block>
+                    <script>
+                        <block s="doSetVar">
+                            <l>step</l>
+                            <l>-1</l>
+                        </block>
+                        <block s="doSetVar">
+                            <l>tester</l>
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <block s="reportLessThan">
+                                        <block var="i"/>
+                                        <block var="end"/>
+                                    </block>
+                                </autolambda>
+                                <list></list>
+                            </block>
+                        </block>
+                    </script>
+                    <script>
+                        <block s="doSetVar">
+                            <l>step</l>
+                            <l>1</l>
+                        </block>
+                        <block s="doSetVar">
+                            <l>tester</l>
+                            <block s="reifyReporter">
+                                <autolambda>
+                                    <block s="reportGreaterThan">
+                                        <block var="i"/>
+                                        <block var="end"/>
+                                    </block>
+                                </autolambda>
+                                <list></list>
+                            </block>
+                        </block>
+                    </script>
+                </block>
+                <block s="doSetVar">
+                    <l>i</l>
+                    <block var="start"/>
+                </block>
+                <block s="doUntil">
+                    <block s="evaluate">
+                        <block var="tester"/>
+                        <list></list>
+                    </block>
+                    <script>
+                        <block s="doRun">
+                            <block var="action"/>
+                            <list></list>
+                        </block>
+                        <block s="doChangeVar">
+                            <l>i</l>
+                            <block var="step"/>
+                        </block>
+                    </script>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="join words %&apos;words&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations>de:füge Wörter zusammen _&#xD;</translations>
+            <inputs>
+                <input type="%mult%txt"></input>
+            </inputs>
+            <script>
+                <block s="doIf">
+                    <l/>
+                    <script>
+                        <block s="doReport">
+                            <block s="reportListItem">
+                                <l>1</l>
+                                <block var="words"/>
+                            </block>
+                        </block>
+                    </script>
+                </block>
+                <block s="doIf">
+                    <block s="reportEquals">
+                        <l></l>
+                        <block s="reportListItem">
+                            <l>1</l>
+                            <block var="words"/>
+                        </block>
+                    </block>
+                    <script>
+                        <block s="doReport">
+                            <custom-block s="join words %mult%txt">
+                                <block s="reportCDR">
+                                    <block var="words"/>
+                                </block>
+                            </custom-block>
+                        </block>
+                    </script>
+                </block>
+                <block s="doIf">
+                    <block s="reportEquals">
+                        <l></l>
+                        <block s="reportListItem">
+                            <l>2</l>
+                            <block var="words"/>
+                        </block>
+                    </block>
+                    <script>
+                        <block s="doReport">
+                            <custom-block s="join words %mult%txt">
+                                <block s="reportCONS">
+                                    <block s="reportListItem">
+                                        <l>1</l>
+                                        <block var="words"/>
+                                    </block>
+                                    <block s="reportCDR">
+                                        <block s="reportCDR">
+                                            <block var="words"/>
+                                        </block>
+                                    </block>
+                                </block>
+                            </custom-block>
+                        </block>
+                    </script>
+                </block>
+                <block s="doReport">
+                    <block s="reportJoinWords">
+                        <list>
+                            <block s="reportListItem">
+                                <l>1</l>
+                                <block var="words"/>
+                            </block>
+                            <l></l>
+                            <custom-block s="join words %mult%txt">
+                                <block s="reportCDR">
+                                    <block var="words"/>
+                                </block>
+                            </custom-block>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="list $arrowRight sentence %&apos;data&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations>de:Liste $arrowRight Satz _&#xD;</translations>
+            <inputs>
+                <input type="%l"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <custom-block s="join words %mult%txt">
+                        <block var="data"/>
+                    </custom-block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="sentence $arrowRight list %&apos;text&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations>de:Satz $arrowRight Liste _&#xD;</translations>
+            <inputs>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportTextSplit">
+                        <block var="text"/>
+                        <l>
+                            <option>whitespace</option>
+                        </l>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="word $arrowRight list %&apos;word&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations>de:Wort $arrowRight Liste _&#xD;</translations>
+            <inputs>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportTextSplit">
+                        <block var="word"/>
+                        <l>
+                            <option>letter</option>
+                        </l>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="list $arrowRight word %&apos;list&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations>de:Liste $arrowRight Wort _&#xD;</translations>
+            <inputs>
+                <input type="%l"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportJoinWords">
+                        <block var="list"/>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; の位置を %&apos;vec&apos; ずつ変える （ローカル）" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>vec</l>
+                        </list>
+                        <l>//console.log(vec);&#xD;//obj.position.x = obj.position.x + vec.x;&#xD;//obj.position.y = obj.position.y + vec.y;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;//obj.position.z = obj.position.z + vec.z;
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;//obj.translateOnAxis(new THREE.Vector3(1,0,0), vec.x);
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;//obj.translateOnAxis(new THREE.Vector3(0,1,0), vec.y);
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;//obj.translateOnAxis(new THREE.Vector3(0,0,1), vec.z);
+&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;&#xD;obj.translateX(vec.x);&#xD;obj.translateY(vec.y);&#xD;obj.translateZ(vec.z);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="vec"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec1&apos; + %&apos;vec2&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">vec</input>
+                <input type="%txt">vec</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec1</l>
+                                <l>vec2</l>
+                            </list>
+                            <l>return vec1.add(vec2);</l>
+                        </block>
+                        <list>
+                            <block var="vec1"/>
+                            <block var="vec2"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec1&apos; dot %&apos;vec2&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">vec</input>
+                <input type="%txt">vec</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec1</l>
+                                <l>vec2</l>
+                            </list>
+                            <l>return vec1.dot(vec2);</l>
+                        </block>
+                        <list>
+                            <block var="vec1"/>
+                            <block var="vec2"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec1&apos; が %&apos;vec2&apos; で反射後の方向" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec1</l>
+                                <l>vec2</l>
+                            </list>
+                            <l>return vec1.reflect(vec2);</l>
+                        </block>
+                        <list>
+                            <block var="vec1"/>
+                            <block var="vec2"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のテクスチャーを canvas: %&apos;can&apos; にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%txt"></input>
+            </inputs>
+        </block-definition>
+        <block-definition s="キャンバス size: %&apos;w&apos; %&apos;h&apos;" type="reporter" category="variables">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">256</input>
+                <input type="%n">256</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>w</l>
+                                <l>h</l>
+                            </list>
+                            <l>var cvs = document.createElement(&apos;canvas&apos;);&#xD;    cvs.width = w;&#xD;    cvs.height = h;&#xD;return cvs;</l>
+                        </block>
+                        <list>
+                            <block var="w"/>
+                            <block var="h"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="stroke text %&apos;x&apos; %&apos;y&apos; text: %&apos;txt&apos;" type="command" category="pen">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n">0</input>
+                <input type="%n">0</input>
+                <input type="%txt"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>x</l>
+                            <l>y</l>
+                            <l>txt</l>
+                        </list>
+                        <l>ctx.strokeText(txt, x, y);</l>
+                    </block>
+                    <list>
+                        <block var="x"/>
+                        <block var="y"/>
+                        <block var="txt"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のID名を” %&apos;id&apos; ”にする" type="command" category="other">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>str</l>
+                        </list>
+                        <l>obj.name = str</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="id"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のID名" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">obj</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>obj</l>
+                            </list>
+                            <l>return obj.name;</l>
+                        </block>
+                        <list>
+                            <block var="obj"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;raydata&apos; の距離" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">raydata</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>raydata</l>
+                            </list>
+                            <l>  //console.log(rc.distance);&#xD;if(raydata == false){&#xD;  return Infinity;&#xD;}else{&#xD;return raydata.distance;
+&#xD;&#xD;}</l>
+                        </block>
+                        <list>
+                            <block var="raydata"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;raydata&apos; の面の向き" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%txt">raydata</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>raydata</l>
+                            </list>
+                            <l>  //console.log(rc.face.normal);&#xD;  return raydata.face.normal;</l>
+                        </block>
+                        <list>
+                            <block var="raydata"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;raydata&apos; のOBJ" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">raydata</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>raydata</l>
+                            </list>
+                            <l>  //console.log(rc.object);&#xD;  return raydata.object;</l>
+                        </block>
+                        <list>
+                            <block var="raydata"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を グローバルX 軸で %&apos;val&apos; 度回転する" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>obj.rotateOnWorldAxis ( new THREE.Vector3(1,0,0), val );</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を グローバルY 軸で %&apos;val&apos; 度回転する" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>obj.rotateOnWorldAxis ( new THREE.Vector3(0,1,0), val );</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を グローバルZ 軸で %&apos;val&apos; 度回転する" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>obj.rotateOnWorldAxis ( new THREE.Vector3(0,0,1), val );</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を ローカルX 軸で %&apos;val&apos; 度回転する" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>var deg= Math.PI/180;&#xD;obj.rotateX(val*deg);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を ローカルY 軸で %&apos;val&apos; 度回転する" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>var deg= Math.PI/180;&#xD;obj.rotateY(val*deg);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; を ローカルZ 軸で %&apos;val&apos; 度回転する" type="command" category="motion">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s"></input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>val</l>
+                        </list>
+                        <l>var deg= Math.PI/180;&#xD;obj.rotateZ(val*deg);</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="val"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="raycaster" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs></inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list></list>
+                            <l>var rc = new THREE.Raycaster();&#xD;return rc;</l>
+                        </block>
+                        <list></list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec&apos; のY" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec</l>
+                            </list>
+                            <l>return vec.y;</l>
+                        </block>
+                        <list>
+                            <block var="vec"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;vec&apos; のZ" type="reporter" category="sensing">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">vec</input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="evaluate">
+                        <block s="reportJSFunction">
+                            <list>
+                                <l>vec</l>
+                            </list>
+                            <l>return vec.z;</l>
+                        </block>
+                        <list>
+                            <block var="vec"/>
+                        </list>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のテクスチャーを video: %&apos;video&apos; にする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+                <input type="%s">URL</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                            <l>videosrc</l>
+                        </list>
+                        <l>isDone = false;
+&#xD;&#xD;// videoタグの用意
+&#xD;var video = document.createElement( &apos;video&apos; );&#xD;video.id = "video";&#xD;//console.log(video);
+&#xD;video.src = videosrc;
+&#xD;video.load();
+
+&#xD;&#xD;// three.js用のテクスチャに変換
+&#xD;var texture = new THREE.VideoTexture( video );
+&#xD;texture.minFilter = THREE.LinearFilter;
+&#xD;texture.magFilter = THREE.LinearFilter;
+&#xD;texture.format = THREE.RGBFormat;
+
+&#xD;&#xD;// マテリアルに動画を貼る
+&#xD;var material = new THREE.MeshPhongMaterial( { map: texture } );
+&#xD;obj.material = material;&#xD;video.onloadeddata = function(){ 
+&#xD;video.play();
+&#xD;isDone = true;&#xD;}</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                        <block var="video"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のvideoを止める" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>obj.material.map.image.pause();
+                        </l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のvideoを再生する" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>obj.material.map.image.play();
+                        </l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のvideoを巻き戻す" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>obj.material.map.image.currentTime = 0;
+                        </l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="%&apos;obj&apos; のvideoを音をon/offする" type="command" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s">obj</input>
+            </inputs>
+            <script>
+                <block s="doRun">
+                    <block s="reportJSFunction">
+                        <list>
+                            <l>obj</l>
+                        </list>
+                        <l>obj.material.map.image.muted != obj.material.map.image.muted;</l>
+                    </block>
+                    <list>
+                        <block var="obj"/>
+                    </list>
+                </block>
+            </script>
+        </block-definition>
+    </blocks>
+    <variables>
+        <variable name="obj1">
+            <l>0</l>
+        </variable>
+        <variable name="obj2">
+            <l>0</l>
+        </variable>
+        <variable name="obj3">
+            <l>0</l>
+        </variable>
+        <variable name="obj4">
+            <l>0</l>
+        </variable>
+        <variable name="obj5">
+            <l>0</l>
+        </variable>
+        <variable name="obj6">
+            <l>0</l>
+        </variable>
+        <variable name="obj7">
+            <l>0</l>
+        </variable>
+        <variable name="obj8">
+            <l>0</l>
+        </variable>
+        <variable name="light1">
+            <l>0</l>
+        </variable>
+        <variable name="light2">
+            <l>0</l>
+        </variable>
+        <variable name="light3">
+            <l>0</l>
+        </variable>
+        <variable name="light4">
+            <l>0</l>
+        </variable>
+        <variable name="vec1">
+            <l>0</l>
+        </variable>
+        <variable name="vec2">
+            <l>0</l>
+        </variable>
+        <variable name="canvas1">
+            <l>0</l>
+        </variable>
+        <variable name="canvas2">
+            <l>0</l>
+        </variable>
+        <variable name="raycast1">
+            <l>0</l>
+        </variable>
+        <variable name="reycast2">
+            <l>0</l>
+        </variable>
+        <variable name="raydata1">
+            <l>0</l>
+        </variable>
+        <variable name="raydata2">
+            <l>0</l>
+        </variable>
+        <variable name="raydata3">
+            <l>0</l>
+        </variable>
+    </variables>
