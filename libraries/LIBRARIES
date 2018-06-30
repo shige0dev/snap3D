@@ -16,6 +16,6 @@ crayons.xml	Provide 100 selected colors	to use instead of hue for better selecti
 speech_module.xml	Text to speech	output text using speech synthesis.
 animation_module.xml	Animation	glide, grow and rotate using easing functions.
 pixel_module.xml	Pixels	manipulate costumes pixel-wise.
-3Dtools.xml For Three.js
+3Dtools.xml For Three.js.
 audioComp_module.xml	Audio Comp	analyze, manipulate and generate sound samples.
 
